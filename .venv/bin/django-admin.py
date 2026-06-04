@@ -1,4 +1,4 @@
-#!/Users/tolaalade/Documents/boutique_ado_v1/.venv/bin/python3.12
+#!/Users/tolaalade/Documents/plantain_parade/.venv/bin/python3.12
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
