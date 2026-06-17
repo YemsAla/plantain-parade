@@ -128,6 +128,7 @@
 							<span>Your card will be charged <strong>£{{ grand_total|floatformat:2 }}</strong></span>
 						</p>
 					</div>
+                    <input type="hidden" value="{{ client_secret }}" name="client_secret">
                 </form>
             </div>
         </div>
