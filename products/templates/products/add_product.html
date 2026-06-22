@@ -25,7 +25,13 @@
             <div class="col-12 col-md-6">
                 <form method="POST" action="{% url 'add_product' %}" class="form mb-2" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    {% for field in form %}
+                        {% if field.field.widget.template_name == 'products/custom_widget_templates/custom_clearable_file_input.html' %}
+                            {{ field }}
+                        {% else %}
+                            {{ field|as_crispy_field }}
+                        {% endif %}
+                    {% endfor %}
                     <div class="text-right">
                         <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0">Cancel</a>
                         <button type="submit" class="btn btn-black rounded-0">Add Product</button>
@@ -34,4 +40,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+        $('#new-image').change(function() {
+            var file = $('#new-image')[0].files[0];
+            $('#filename').text(`Image will be set to: ${file.name}`);
+        });
+    </script>
 {% endblock %}
