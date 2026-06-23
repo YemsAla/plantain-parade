@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <hr>
+                <h2 class="logo-font mb-4">Delete Ripeness Stage</h2>
+                <hr>
+                <p>Are you sure you want to delete <strong>{{ stage.get_stage_display }}</strong>? This cannot be undone.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <a href="{% url 'ripeness_guide' %}" class="btn btn-outline-black rounded-0">Cancel</a>
+                    <button type="submit" class="btn btn-danger rounded-0">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

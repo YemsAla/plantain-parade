@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'checkout',
     'django_countries',
     'profiles',
+    'plantain_ripeness_guide',
 
     # Other 
     'crispy_forms',

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <hr>
+                <h2 class="logo-font mb-4">{{ stage.get_stage_display }} Plantain</h2>
+                <hr>
+                {% if stage.image %}
+                    <img src="{{ stage.image.url }}" class="img-fluid rounded mb-4" alt="{{ stage.stage }}">
+                {% else %}
+                    <img src="{{ MEDIA_URL }}noimage.png" class="img-fluid rounded mb-4" alt="{{ stage.stage }}">
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mt-5">
+                    <h4 class="logo-font">Description</h4>
+                    <p>{{ stage.description }}</p>
+                    <h4 class="logo-font mt-4">Best Uses</h4>
+                    <p>{{ stage.best_uses }}</p>
+                    <h4 class="logo-font mt-4">Cooking Tips</h4>
+                    <p>{{ stage.cooking_tips }}</p>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'edit_ripeness' stage.id %}" class="btn btn-black rounded-0 mt-3">Edit</a>
+                        <a href="{% url 'delete_ripeness' stage.id %}" class="btn btn-outline-danger rounded-0 mt-3">Delete</a>
+                    {% endif %}
+                    <a href="{% url 'ripeness_guide' %}" class="btn btn-outline-black rounded-0 mt-3">Back to Guide</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

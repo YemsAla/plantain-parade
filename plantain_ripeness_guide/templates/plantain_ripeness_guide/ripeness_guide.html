@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <hr>
+                <h2 class="logo-font mb-4">Plantain Ripeness Guide</h2>
+                <p class="text-muted">Not sure which plantain to pick? Here's your guide.</p>
+                <hr>
+            </div>
+        </div>
+        {% if request.user.is_superuser %}
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{% url 'add_ripeness' %}" class="btn btn-black rounded-0">Add Ripeness Stage</a>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            {% for stage in stages %}
+                <div class="col-12 col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 border-0">
+                        {% if stage.image %}
+                            <img src="{{ stage.image.url }}" class="card-img-top" alt="{{ stage.stage }}">
+                        {% else %}
+                            <img src="{{ MEDIA_URL }}noimage.png" class="card-img-top" alt="{{ stage.stage }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title logo-font">{{ stage.get_stage_display }}</h5>
+                            <p class="card-text text-muted small">{{ stage.description|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="{% url 'ripeness_detail' stage.id %}" class="btn btn-black rounded-0 btn-sm">Learn More</a>
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'edit_ripeness' stage.id %}" class="btn btn-outline-black rounded-0 btn-sm">Edit</a>
+                                <form method="GET" action="{% url 'delete_ripeness' stage.id %}">
+                                    <button type="submit" class="btn btn-outline-danger rounded-0 btn-sm">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
