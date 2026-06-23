@@ -1,0 +1,1 @@
+web: gunicorn plantain_parade.wsgi:application
