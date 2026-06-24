@@ -206,16 +206,10 @@ if 'USE_AWS' in os.environ:
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
     # Static and media files
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     STATICFILES_LOCATION = 'static'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     MEDIAFILES_LOCATION = 'media'
-    STORAGES = {
-        "default": {
-            "BACKEND": "custom_storages.MediaStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "custom_storages.StaticStorage",
-        },
-    }
 
     # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
@@ -236,3 +230,16 @@ STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = 'plantainparade@example.com'
+
+# {
+# 	"Version": "2012-10-17",
+# 	"Statement": [
+# 		{
+# 			"Sid": "PublicReadGetObject",
+# 			"Effect": "Allow",
+# 			"Principal": "*",
+# 			"Action": "s3:GetObject",
+# 			"Resource": "arn:aws:s3:::plantain-parade/*"
+# 		}
+# 	]
+# }
