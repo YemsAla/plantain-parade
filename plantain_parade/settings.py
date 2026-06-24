@@ -198,6 +198,8 @@ if 'USE_AWS' in os.environ:
     }
 
     AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
     
     # Bucket Config
     AWS_STORAGE_BUCKET_NAME = 'plantain-parade'
@@ -221,6 +223,10 @@ if 'USE_AWS' in os.environ:
     # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+
+    
+
+
 
     
 
