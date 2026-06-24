@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'plantain_ripeness_guide',
     'storages',
     'crispy_bootstrap4',
+    'faqs',
 ]
 
 MIDDLEWARE = [

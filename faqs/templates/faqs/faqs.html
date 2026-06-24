@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <hr>
+                <h2 class="logo-font mb-4">Frequently Asked Questions</h2>
+                <hr>
+            </div>
+        </div>
+        {% if request.user.is_superuser %}
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{% url 'add_faq' %}" class="btn btn-black rounded-0">Add FAQ</a>
+                </div>
+            </div>
+        {% endif %}
+        {% regroup faqs by category as faq_list %}
+        <div class="accordion" id="faqAccordion">
+            {% for category in faq_list %}
+                <div class="card border-0 mb-3">
+                    <div class="card-header bg-dark" id="heading-{{ forloop.counter }}">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link text-white text-uppercase logo-font" 
+                                data-toggle="collapse" 
+                                data-target="#collapse-{{ forloop.counter }}" 
+                                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" 
+                                aria-controls="collapse-{{ forloop.counter }}">
+                                {{ category.grouper }}
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapse-{{ forloop.counter }}" 
+                        class="collapse {% if forloop.first %}show{% endif %}" 
+                        aria-labelledby="heading-{{ forloop.counter }}" 
+                        data-parent="#faqAccordion">
+                        <div class="card-body">
+                            {% for faq in category.list %}
+                                <div class="mb-4">
+                                    <h5><strong>{{ faq.question }}</strong></h5>
+                                    <p>{{ faq.answer }}</p>
+                                    {% if request.user.is_superuser %}
+                                        <a href="{% url 'edit_faq' faq.id %}" class="btn btn-outline-black rounded-0 btn-sm">Edit</a>
+                                        <a href="{% url 'delete_faq' faq.id %}" class="btn btn-outline-danger rounded-0 btn-sm">Delete</a>
+                                    {% endif %}
+                                </div>
+                                {% if not forloop.last %}<hr>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
