@@ -26,11 +26,23 @@
             <div class="col-12 col-md-6">
                 <div class="mt-5">
                     <h4 class="logo-font">Description</h4>
-                    <p>{{ stage.description }}</p>
+                    <p>{{ stage.description | linebreaks }}</p>
                     <h4 class="logo-font mt-4">Best Uses</h4>
-                    <p>{{ stage.best_uses }}</p>
+                    <ul>
+                        {% for line in stage.best_uses.splitlines %}
+                            {% if line %}
+                                <li>{{ line }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                     <h4 class="logo-font mt-4">Cooking Tips</h4>
-                    <p>{{ stage.cooking_tips }}</p>
+                    <ul>
+                        {% for line in stage.cooking_tips.splitlines %}
+                            {% if line %}
+                                <li>{{ line }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                     {% if request.user.is_superuser %}
                         <a href="{% url 'edit_ripeness' stage.id %}" class="btn btn-black rounded-0 mt-3">Edit</a>
                         <a href="{% url 'delete_ripeness' stage.id %}" class="btn btn-outline-danger rounded-0 mt-3">Delete</a>
