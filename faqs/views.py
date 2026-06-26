@@ -11,6 +11,7 @@ def faqs(request):
     template = 'faqs/faqs.html'
     context = {
         'faqs': faqs,
+        'on_faqs_page': True,
     }
     return render(request, template, context)
 
