@@ -325,6 +325,10 @@ stripe listen --forward-to localhost:8000/checkout/wh/
 
 > **Static files on Heroku:** Django 6 removed the `STATICFILES_STORAGE` setting used in the Code Institute walkthrough, replacing it with a `STORAGES` dictionary. This causes a 403 error when collectstatic attempts to upload to S3. As a workaround, `DISABLE_COLLECTSTATIC=1` is set in Heroku config vars. The site is fully functional but CSS is not currently served via S3. Media file uploads to S3 work correctly. This will be resolved before final submission.
 
+Static files on Heroku | Resolved — switched to Whitenoise for static file serving 
+
+Media files (product images) | Images not displaying on Heroku as media files require cloud storage. AWS S3 media upload was configured but HeadObject 403 error prevented full integration. Images display correctly in local development. 
+
 ### Forking the Repository
 
 1. Log in to GitHub and locate the repository.

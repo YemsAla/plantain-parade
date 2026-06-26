@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'storages',
     'crispy_bootstrap4',
     'faqs',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -233,7 +235,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
 #     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/' 
 
-
+# Cloudinary for media files
+CLOUDINARY_STORAGE = {
+    'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
+}
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Stripe settings
 FREE_DELIVERY_THRESHOLD = 50
@@ -249,15 +262,4 @@ STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET', '')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_FROM_EMAIL = 'plantainparade@example.com'
 
-# {
-# 	"Version": "2012-10-17",
-# 	"Statement": [
-# 		{
-# 			"Sid": "PublicReadGetObject",
-# 			"Effect": "Allow",
-# 			"Principal": "*",
-# 			"Action": "s3:GetObject",
-# 			"Resource": "arn:aws:s3:::plantain-parade/*"
-# 		}
-# 	]
-# }
+
