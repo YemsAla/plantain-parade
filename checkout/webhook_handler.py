@@ -1,3 +1,7 @@
+# Core logic adapted from Code Institute Boutique Ado walkthrough
+# Source: https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode
+
+
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string

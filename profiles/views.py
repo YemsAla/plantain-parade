@@ -1,3 +1,6 @@
+# Core logic adapted from Code Institute Boutique Ado walkthrough
+# Source: https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

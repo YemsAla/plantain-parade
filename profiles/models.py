@@ -1,3 +1,6 @@
+# Core logic adapted from Code Institute Boutique Ado walkthrough
+# Source: https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save

@@ -127,15 +127,15 @@ The database was designed using PostgreSQL and consists of 8 models across 6 app
 
 **Custom Models:**
 
-`RipenessGuide` — stores information about each plantain ripeness stage including description, best uses, cooking tips and an optional image. Full CRUD is available to superusers via the storefront.
+`RipenessGuide`: stores information about each plantain ripeness stage including description, best uses, cooking tips and an optional image. Full CRUD is available to superusers via the storefront.
 
-`FAQ` — stores frequently asked questions grouped by category (Orders, Delivery, Products, Returns, General) with an order field to control display sequence. Full CRUD is available to superusers via the storefront.
+`FAQ`:  stores frequently asked questions grouped by category (Orders, Delivery, Products, Returns, General) with an order field to control display sequence. Full CRUD is available to superusers via the storefront.
 
 ---
 
 ### Colour Scheme and Typography
 
-The site uses a warm cream background (`#FAF3E0`) with black text and black buttons to reflect the DÒDÒ brand identity — bold, premium and Caribbean-inspired.
+The site uses a warm cream background (`#FAF3E0`) with black text and black buttons to reflect the DÒDÒ brand identity.
 
 **Typography:** The `Lato` font family is used throughout, imported via Google Fonts. Logo text uses a custom `logo-font` class for brand consistency.
 
@@ -149,13 +149,13 @@ The site uses a warm cream background (`#FAF3E0`) with black text and black butt
 A fully responsive navigation bar is present on all pages. On desktop it displays the logo, search bar, My Account dropdown and bag icon in the top row, with product category links in the second row. On mobile it collapses to a hamburger menu.
 
 **Homepage**
-A full-width hero section with brand tagline and a Shop Now CTA button. A free delivery banner displays across all pages.
+A hero section with brand tagline and a Shop Now CTA button. The free delivery banner displays across all pages.
 
 **Products Page**
 Displays all products as cards showing image, name, price, category and rating. Products can be filtered by category and sorted by price, rating or category. The count of results is shown.
 
 **Product Detail Page**
-Shows the full product details including image, name, price, category, rating, description and a quantity selector. Users can add the product to their bag or return to shopping.
+Shows the full product details including image, name, price, category, rating, description and a quantity counter. Users can add the product to their bag or return to shopping.
 
 **Shopping Bag**
 Displays all items in the bag with quantity adjusters and remove buttons. Shows subtotal, delivery cost and grand total. Links to secure checkout.
@@ -164,10 +164,10 @@ Displays all items in the bag with quantity adjusters and remove buttons. Shows 
 A two-column layout with delivery form on the left and order summary on the right. Logged-in users have their delivery information pre-filled. Stripe card payment integration. Save info checkbox to update profile on checkout.
 
 **Checkout Success**
-Displays a full order confirmation with order number, items, delivery address and totals. A confirmation email is sent via the webhook handler.
+Displays a full order confirmation with order number, items, delivery address. A confirmation email is sent via the webhook handler.
 
 **User Authentication**
-Registration, login and logout powered by Django Allauth. Email verification is set to mandatory. Login and logout redirect to the homepage.
+Registration, login and logout are all powered by Django Allauth. Email verification is set to mandatory. Login and logout redirect to the homepage.
 
 **Profile Page**
 Logged-in users can view and update their default delivery information. Order history is displayed in a table with links to past order confirmations.
@@ -176,10 +176,10 @@ Logged-in users can view and update their default delivery information. Order hi
 Store owners can add, edit and delete products directly from the storefront. Access is restricted to superusers via `@login_required` and `is_superuser` checks.
 
 **Plantain Ripeness Guide**
-A custom app displaying four plantain ripeness stages (Green, Yellow, Brown, Overripe) as cards. Each stage has a detail page with description, best uses and cooking tips formatted as bullet points. Superusers can add, edit and delete stages via the storefront.
+My custom app displaying four plantain ripeness stages (Green, Yellow, Brown, Overripe) as cards. Each stage has a detail page with description, best uses and cooking tips. Superusers can add, edit and delete stages via the storefront.
 
 **FAQs**
-A custom app displaying frequently asked questions grouped by category in a Bootstrap accordion. Superusers can add, edit and delete FAQs via the storefront. 10 FAQs across 5 categories are live on the deployed site.
+My second custom app displaying frequently asked questions grouped by category in a Bootstrap accordion. Superusers can add, edit and delete FAQs via the storefront. 15 FAQs across 5 categories are live on the deployed site.
 
 **Toast Notifications**
 Success, error, warning and info messages display as toast notifications after all key user actions.
@@ -191,8 +191,6 @@ Success, error, warning and info messages display as toast notifications after a
 - Wishlist functionality for registered users
 - Forgotten password / email-based account recovery
 - Product reviews and ratings submitted by customers
-- Stock management system
-- Real email sending in production (currently using console backend)
 
 ---
 
@@ -249,3 +247,144 @@ The project is deployed on **Heroku** using a PostgreSQL database provided by Co
 ### Local Development Setup
 
 1. Clone the repository:
+git clone https://github.com/YemsAla/plantain-parade.git
+
+    cd plantain-parade
+
+2. Create and activate a virtual environment: python -m venv .venv
+source .venv/bin/activate
+
+3. Install dependencies:
+pip install -r requirements.txt
+
+4. Create an `env.py` file in the root directory with the following variables:
+```python
+import os
+
+os.environ['SECRET_KEY'] = 'your-secret-key'
+os.environ['STRIPE_PUBLIC_KEY'] = 'your-stripe-public-key'
+os.environ['STRIPE_SECRET_KEY'] = 'your-stripe-secret-key'
+os.environ['STRIPE_WH_SECRET'] = 'your-stripe-webhook-secret'
+os.environ['DATABASE_URL'] = 'your-database-url'
+os.environ.setdefault('DEVELOPMENT', '1')
+```
+
+5. Run migrations and start the development server:
+python manage.py migrate
+
+    python manage.py runserver
+
+6. To test Stripe payments locally, run the Stripe listener in a separate terminal:
+stripe listen --forward-to localhost:8000/checkout/wh/
+
+### Heroku Deployment
+
+1. Create a new Heroku app.
+2. In the Heroku dashboard go to **Settings → Config Vars** and add:
+   - `SECRET_KEY`
+   - `DATABASE_URL`
+   - `STRIPE_PUBLIC_KEY`
+   - `STRIPE_SECRET_KEY`
+   - `STRIPE_WH_SECRET`
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `USE_AWS = True`
+3. Connect the GitHub repository under the **Deploy** tab and enable automatic deploys.
+4. Ensure `Procfile` contains: web: 
+
+    gunicorn plantain_parade.wsgi:application
+
+5. Ensure `.python-version` contains:
+    3.12
+
+6. Run migrations on Heroku via the console:
+
+    python manage.py migrate
+
+7. Load fixtures: 
+    
+    python manage.py loaddata categories
+    
+    python manage.py loaddata products
+
+8. Create a superuser:
+    
+    python manage.py createsuperuser
+
+### AWS S3 Setup
+
+1. Create an S3 bucket named `plantain-parade` in `eu-west-2`.
+2. Enable static website hosting on the bucket.
+3. Configure CORS policy, bucket policy and ACL permissions.
+4. Create an IAM user group with S3 access policy attached.
+5. Create an IAM user, add to the group and download the access key CSV.
+6. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to Heroku config vars.
+7. Upload media files to an S3 `media/` folder.
+
+### Known Deployment Issues
+
+> **Static files on Heroku:** Django 6 removed the `STATICFILES_STORAGE` setting used in the Code Institute walkthrough, replacing it with a `STORAGES` dictionary. This causes a 403 error when collectstatic attempts to upload to S3. As a workaround, `DISABLE_COLLECTSTATIC=1` is set in Heroku config vars. The site is fully functional but CSS is not currently served via S3. Media file uploads to S3 work correctly. This will be resolved before final submission.
+
+### Forking the Repository
+
+1. Log in to GitHub and locate the repository.
+2. Click the **Fork** button at the top of the repository page.
+3. You will now have a copy of the repository in your GitHub account.
+
+### Making a Local Clone
+
+1. Log in to GitHub and locate the repository.
+2. Click **Code** and copy the HTTPS URL.
+3. Open your terminal and run:
+
+git clone https://github.com/YemsAla/plantain-parade.git
+
+---
+
+## Attribution
+
+The foundational e-commerce structure of Plantain Parade is based on the **Code Institute Boutique Ado walkthrough project**, as permitted by the assessment criteria. This includes the core apps for products, bag, checkout, profiles and Stripe payment integration.
+
+The following elements have been built custom for Plantain Parade and are entirely my own work:
+
+- **Plantain Ripeness Guide app**: custom Django model, full CRUD, templates and views built from scratch
+- **FAQs app**: custom Django model, Bootstrap accordion display, full CRUD, templates and views built from scratch
+- **Afro-centric branding**: custom colour scheme, typography, hero image, product content and brand identity
+- **Navigation customisation**:  adapted nav structure to include custom app links
+- **Toast behaviour**: extended toast logic to suppress bag display on FAQs and profile pages
+- **Bullet point formatting**:  custom Django template filter logic for the plantain ripeness guide detail pages
+- **Deployment adaptations**: resolved Django 6 compatibility issues not covered in the walkthrough (django-countries version, STORAGES dictionary, crispy-bootstrap4)
+
+Where code from the walkthrough has been used directly, this is noted in comments within the relevant files.
+
+---
+
+## Credits
+
+### Content
+
+All product descriptions, FAQ content and Plantain Ripeness Guide content was written specifically for this project.
+
+### Media
+
+- Hero image: personal DÒDÒ brand asset
+- Product images: DÒDÒ brand assets
+- No-image placeholder: Code Institute Boutique Ado walkthrough
+
+### Code and Resources
+
+- [Django documentation](https://docs.djangoproject.com/) — core framework reference
+- [Bootstrap 4 documentation](https://getbootstrap.com/docs/4.0/) — grid system and components
+- [Code Institute Boutique Ado walkthrough](https://codeinstitute.net/) — the core e-commerce functionality including products, bag, checkout, profiles, Stripe integration and webhook handler is based on the CI walkthrough and adapted for Plantain Parade
+- [Stripe documentation](https://stripe.com/docs) — payment integration reference
+- [Django Allauth documentation](https://django-allauth.readthedocs.io/) — authentication
+- [django-storages documentation](https://django-storages.readthedocs.io/) — AWS S3 integration
+- [dbdiagram.io](https://dbdiagram.io) — ERD creation
+- [Balsamiq](https://balsamiq.com) — wireframe creation
+- [Claude by Anthropic](https://claude.ai) — used as a development aid for debugging, code guidance, problem solving and README documentation
+
+### Acknowledgements
+
+- My tutor, Rachel Frurlong, for guidance and support throughout the project
+- The Code Institute community and Discord channels
+

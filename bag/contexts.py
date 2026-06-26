@@ -1,3 +1,6 @@
+# Core logic adapted from Code Institute Boutique Ado walkthrough
+# Source: https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode
+
 from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404

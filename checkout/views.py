@@ -1,3 +1,7 @@
+# Core logic adapted from Code Institute Boutique Ado walkthrough
+# Source: https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode
+
+
 from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
