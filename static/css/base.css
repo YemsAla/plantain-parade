@@ -269,3 +269,43 @@ input[type="text"]::placeholder {
         height: calc(100vh - 116px);
     }
 }
+
+@media (max-width: 991px) {
+    .header-container {
+        padding-top: 116px;
+    }
+
+    body {
+        height: calc(100vh - 116px);
+    }
+
+    /* NEW — hero text breathing room on mobile */
+    .home-background ~ .container .col-12 h1 {
+        font-size: 2rem;
+    }
+
+        /* Tighten mobile nav icons so all 5 fit in one row */
+    .navbar .nav-link {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.75rem;
+    }
+
+    .navbar .nav-link i {
+        font-size: 1rem !important;
+    }
+
+    .navbar .list-inline-item {
+        margin: 0;
+    }
+}
+
+/* Extra small screens (375px) */
+@media (max-width: 480px) {
+    .header-container {
+        padding-top: 130px;
+    }
+
+    body {
+        height: calc(100vh - 130px);
+    }
+}

@@ -1,4 +1,12 @@
 <li class="list-inline-item">
+    <a class="text-black nav-link d-block d-lg-none" href="{% url 'home' %}">
+        <div class="text-center">
+            <div><i class="fas fa-home fa-lg"></i></div>
+            <p class="my-0">Home</p>
+        </div>
+    </a>
+</li>
+<li class="list-inline-item">
     <a class="text-black nav-link d-block d-lg-none" href="#" id="mobile-search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="text-center">
             <div><i class="fas fa-search fa-lg"></i></div>
@@ -24,7 +32,7 @@
     <a class="text-black nav-link d-block d-lg-none" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="text-center">
             <div><i class="fas fa-user fa-lg"></i></div>
-            <p class="my-0">My Account</p>
+            <p class="my-0">Account</p>
         </div>
     </a>
     <div class="dropdown-menu border-0" aria-labelledby="user-options">
@@ -32,9 +40,9 @@
             {% if request.user.is_superuser %}
                 <a href="{% url 'add_product' %}" class="dropdown-item">Product Management</a>
             {% endif %}
-            <a href="{% url 'ripeness_guide' %}" class="dropdown-item">PlantainRipeness Guide</a>
+            <a href="{% url 'ripeness_guide' %}" class="dropdown-item">Plantain Ripeness Guide</a>
             <a href="{% url 'faqs' %}" class="dropdown-item">FAQs</a>
-            <a href="" class="dropdown-item">My Profile</a>
+            <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
             <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
         {% else %}
             <a href="{% url 'ripeness_guide' %}" class="dropdown-item">Plantain Ripeness Guide</a>

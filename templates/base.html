@@ -68,7 +68,7 @@
         </form>
       </div>
       <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-        <ul class="list-inline list-unstyled text-center text-lg-right my-0">
+        <ul class="list-inline list-unstyled text-center text-lg-right my-0 px-0">
           <li class="list-inline-item dropdown">
             <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false">
@@ -109,12 +109,16 @@
     </div>
     <div class="row bg-white">
       <nav class="navbar navbar-expand-lg navbar-light w-100">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
-          aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        {% include 'includes/mobile-top-header.html' %}
-        {% include 'includes/main-nav.html' %}
+          <ul class="list-inline list-unstyled d-flex d-lg-none flex-nowrap justify-content-around align-items-center w-100 my-0">
+              <li class="list-inline-item">
+                  <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#main-nav"
+                    aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+              </li>
+              {% include 'includes/mobile-top-header.html' %}
+          </ul>
+          {% include 'includes/main-nav.html' %}
       </nav>
     </div>
     <div id="delivery-banner" class="row text-center">
@@ -149,13 +153,27 @@
   {% block content %}
   {% endblock %}
 
-  {% block postloadjs %}
+{% block footer %}
+<footer class="bg-black text-white text-center py-3 mt-4">
+    <div class="container">
+        <p class="my-0 small">© 2026 Plantain Parade. All rights reserved.</p>
+        <p class="my-0 small">
+            <a href="{% url 'faqs' %}" class="text-white">FAQs</a> |
+            <a href="{% url 'ripeness_guide' %}" class="text-white">Plantain Ripeness Guide</a>
+        </p>
+    </div>
+</footer>
+{% endblock %}
 
-  <script type="text/javascript">
-    $('.toast').toast('show');
-  </script>
-
+  {% block preloadjs %}
   {% endblock %}
+
+
+{% block postloadjs %}
+<script type="text/javascript">
+  $('.toast').toast('show');
+</script>
+{% endblock %}
 
 </body>
 

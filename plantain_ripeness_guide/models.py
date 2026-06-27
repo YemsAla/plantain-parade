@@ -14,9 +14,10 @@ class RipenessGuide(models.Model):
     best_uses = models.TextField()
     cooking_tips = models.TextField()
     image = models.ImageField(upload_to='ripeness_guide/', null=True, blank=True)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.get_stage_display()
 
     class Meta:
-        ordering = ['stage']
+        ordering = ['order']
