@@ -22,7 +22,8 @@ def faqs(request):
 def add_faq(request):
     """ Add a FAQ - superuser only """
     if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can do that.')
+        messages.error(
+            request, 'Sorry, only store owners can do that.')
         return redirect(reverse('faqs'))
     if request.method == 'POST':
         form = FAQForm(request.POST)
@@ -31,7 +32,8 @@ def add_faq(request):
             messages.success(request, 'FAQ added successfully!')
             return redirect(reverse('faqs'))
         else:
-            messages.error(request, 'Failed to add FAQ. Please check the form.')
+            messages.error(
+                request, 'Failed to add FAQ. Please check the form.')
     else:
         form = FAQForm()
     template = 'faqs/add_faq.html'
@@ -43,7 +45,8 @@ def add_faq(request):
 def edit_faq(request, faq_id):
     """ Edit a FAQ - superuser only """
     if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can do that.')
+        messages.error(
+            request, 'Sorry, only store owners can do that.')
         return redirect(reverse('faqs'))
     faq = get_object_or_404(FAQ, pk=faq_id)
     if request.method == 'POST':
@@ -53,7 +56,8 @@ def edit_faq(request, faq_id):
             messages.success(request, 'FAQ updated successfully!')
             return redirect(reverse('faqs'))
         else:
-            messages.error(request, 'Failed to update FAQ. Please check the form.')
+            messages.error(
+                request, 'Failed to update FAQ. Please check the form.')
     else:
         form = FAQForm(instance=faq)
         messages.info(request, f'You are editing: {faq.question}')
@@ -66,7 +70,8 @@ def edit_faq(request, faq_id):
 def delete_faq(request, faq_id):
     """ Delete a FAQ - superuser only """
     if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can do that.')
+        messages.error(
+            request, 'Sorry, only store owners can do that.')
         return redirect(reverse('faqs'))
     faq = get_object_or_404(FAQ, pk=faq_id)
     if request.method == 'POST':

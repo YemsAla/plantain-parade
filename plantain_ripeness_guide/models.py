@@ -9,11 +9,13 @@ class RipenessGuide(models.Model):
         ('overripe', 'Overripe'),
     ]
 
-    stage = models.CharField(max_length=20, choices=RIPENESS_CHOICES, unique=True)
+    stage = models.CharField(
+        max_length=20, choices=RIPENESS_CHOICES, unique=True)
     description = models.TextField()
     best_uses = models.TextField()
     cooking_tips = models.TextField()
-    image = models.ImageField(upload_to='ripeness_guide/', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='ripeness_guide/', null=True, blank=True)
     order = models.PositiveIntegerField(default=0)
 
     def __str__(self):

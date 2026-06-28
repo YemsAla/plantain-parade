@@ -12,7 +12,8 @@ class FAQ(models.Model):
 
     question = models.CharField(max_length=500)
     answer = models.TextField()
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='general')
+    category = models.CharField(
+        max_length=50, choices=CATEGORY_CHOICES, default='general')
     order = models.IntegerField(default=0)
 
     class Meta:

@@ -40,7 +40,8 @@ def add_ripeness(request):
             messages.success(request, 'Ripeness stage added successfully!')
             return redirect(reverse('ripeness_guide'))
         else:
-            messages.error(request, 'Failed to add stage. Please check the form.')
+            messages.error(
+                request, 'Failed to add stage. Please check the form.')
     else:
         form = RipenessGuideForm()
 
@@ -63,7 +64,8 @@ def edit_ripeness(request, stage_id):
             messages.success(request, 'Ripeness stage updated successfully!')
             return redirect(reverse('ripeness_guide'))
         else:
-            messages.error(request, 'Failed to update stage. Please check the form.')
+            messages.error(
+                request, 'Failed to update stage. Please check the form.')
     else:
         form = RipenessGuideForm(instance=stage)
         messages.info(request, f'You are editing {stage.stage}')
