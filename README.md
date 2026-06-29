@@ -127,7 +127,7 @@ The database was designed using PostgreSQL and consists of 8 models across 6 app
 
 **Custom Models:**
 
-`RipenessGuide`: stores information about each plantain ripeness stage including description, best uses, cooking tips and an optional image. Full CRUD is available to superusers via the storefront.
+`RipenessGuide`: stores information about each plantain ripeness stage including description, best uses, cooking tips and an image. Full CRUD is available to superusers via the storefront.
 
 `FAQ`:  stores frequently asked questions grouped by category (Orders, Delivery, Products, Returns, General) with an order field to control display sequence. Full CRUD is available to superusers via the storefront.
 
@@ -212,9 +212,9 @@ Success, error, warning and info messages display as toast notifications after a
 | django-allauth 0.50.0 | User authentication |
 | django-crispy-forms + crispy-bootstrap4 | Form rendering |
 | django-countries 7.6.1 | Country field for checkout and profile |
-| django-storages 1.14.6 | AWS S3 file storage |
+| Whitenoise 6.12.0 | Static file serving on Heroku |
+| django-storages + dj3-cloudinary-storage | Cloudinary media file storage |
 | Stripe 15.2.1 | Payment processing |
-| boto3 | AWS SDK for Python |
 | dj-database-url | Database URL parsing |
 | psycopg2-binary | PostgreSQL adapter |
 | Pillow | Image handling |
@@ -226,7 +226,7 @@ Success, error, warning and info messages display as toast notifications after a
 - **Heroku** — deployment platform
 - **PostgreSQL (Neon/CI)** — production database
 - **SQLite** — local development database
-- **AWS S3** — media file storage
+- **Cloudinary** — media file storage
 - **Stripe** — payment processing
 - **VS Code** — code editor
 - **Balsamiq** — wireframe creation
@@ -242,7 +242,7 @@ Full testing documentation including manual tests, bug fixes and browser compati
 
 ## Deployment
 
-The project is deployed on **Heroku** using a PostgreSQL database provided by Code Institute (Neon) and AWS S3 for media file storage.
+The project is deployed on **Heroku** using a PostgreSQL database provided by Code Institute (Neon), Whitenoise for static file serving and Cloudinary for media file storage.
 
 ### Local Development Setup
 
@@ -251,7 +251,8 @@ git clone https://github.com/YemsAla/plantain-parade.git
 
     cd plantain-parade
 
-2. Create and activate a virtual environment: python -m venv .venv
+2. Create and activate a virtual environment: 
+python -m venv .venv
 source .venv/bin/activate
 
 3. Install dependencies:
@@ -266,6 +267,7 @@ os.environ['STRIPE_PUBLIC_KEY'] = 'your-stripe-public-key'
 os.environ['STRIPE_SECRET_KEY'] = 'your-stripe-secret-key'
 os.environ['STRIPE_WH_SECRET'] = 'your-stripe-webhook-secret'
 os.environ['DATABASE_URL'] = 'your-database-url'
+os.environ['CLOUDINARY_URL'] = 'your-cloudinary-url'
 os.environ.setdefault('DEVELOPMENT', '1')
 ```
 
@@ -286,9 +288,9 @@ stripe listen --forward-to localhost:8000/checkout/wh/
    - `STRIPE_PUBLIC_KEY`
    - `STRIPE_SECRET_KEY`
    - `STRIPE_WH_SECRET`
-   - `AWS_ACCESS_KEY_ID`
-   - `AWS_SECRET_ACCESS_KEY`
-   - `USE_AWS = True`
+   - `CLOUDINARY_URL`
+   - `EMAIL_HOST_USER`
+   - `EMAIL_HOST_PASS`
 3. Connect the GitHub repository under the **Deploy** tab and enable automatic deploys.
 4. Ensure `Procfile` contains: web: 
 
@@ -311,23 +313,12 @@ stripe listen --forward-to localhost:8000/checkout/wh/
     
     python manage.py createsuperuser
 
-### AWS S3 Setup
-
-1. Create an S3 bucket named `plantain-parade` in `eu-west-2`.
-2. Enable static website hosting on the bucket.
-3. Configure CORS policy, bucket policy and ACL permissions.
-4. Create an IAM user group with S3 access policy attached.
-5. Create an IAM user, add to the group and download the access key CSV.
-6. Add `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to Heroku config vars.
-7. Upload media files to an S3 `media/` folder.
-
 ### Known Deployment Issues
 
-> **Static files on Heroku:** Django 6 removed the `STATICFILES_STORAGE` setting used in the Code Institute walkthrough, replacing it with a `STORAGES` dictionary. This causes a 403 error when collectstatic attempts to upload to S3. As a workaround, `DISABLE_COLLECTSTATIC=1` is set in Heroku config vars. The site is fully functional but CSS is not currently served via S3. Media file uploads to S3 work correctly. This will be resolved before final submission.
-
-Static files on Heroku | Resolved — switched to Whitenoise for static file serving 
-
-Media files (product images) | Images not displaying on Heroku as media files require cloud storage. AWS S3 media upload was configured but HeadObject 403 error prevented full integration. Images display correctly in local development. 
+| Issue | Resolution |
+|-------|------------|
+| Django 6 removed `STATICFILES_STORAGE` setting used in CI walkthrough, causing 403 errors with AWS S3 collectstatic | Switched to Whitenoise (`CompressedManifestStaticFilesStorage`) for static files — fully resolved |
+| AWS S3 HeadObject 403 error prevented media file serving on Heroku | Switched to Cloudinary (`MediaCloudinaryStorage`) for media files — fully resolved |
 
 ### Forking the Repository
 
@@ -359,7 +350,7 @@ The following elements have been built custom for Plantain Parade and are entire
 - **Bullet point formatting**:  custom Django template filter logic for the plantain ripeness guide detail pages
 - **Deployment adaptations**: resolved Django 6 compatibility issues not covered in the walkthrough (django-countries version, STORAGES dictionary, crispy-bootstrap4)
 
-Where code from the walkthrough has been used directly, this is noted in comments within the relevant files.
+I note within the relevant files in comments, where I've used code directly from the walkthrough videos.
 
 ---
 
@@ -371,9 +362,8 @@ All product descriptions, FAQ content and Plantain Ripeness Guide content was wr
 
 ### Media
 
-- Hero image: personal DÒDÒ brand asset
+- Hero image: personal brand asset
 - Product images: DÒDÒ brand assets
-- No-image placeholder: Code Institute Boutique Ado walkthrough
 
 ### Code and Resources
 
@@ -382,13 +372,14 @@ All product descriptions, FAQ content and Plantain Ripeness Guide content was wr
 - [Code Institute Boutique Ado walkthrough](https://codeinstitute.net/) — the core e-commerce functionality including products, bag, checkout, profiles, Stripe integration and webhook handler is based on the CI walkthrough and adapted for Plantain Parade
 - [Stripe documentation](https://stripe.com/docs) — payment integration reference
 - [Django Allauth documentation](https://django-allauth.readthedocs.io/) — authentication
-- [django-storages documentation](https://django-storages.readthedocs.io/) — AWS S3 integration
+- [Whitenoise documentation](https://whitenoise.readthedocs.io/) — static file serving
+- [Cloudinary documentation](https://cloudinary.com/documentation) — media file storage
 - [dbdiagram.io](https://dbdiagram.io) — ERD creation
 - [Balsamiq](https://balsamiq.com) — wireframe creation
 - [Claude by Anthropic](https://claude.ai) — used as a development aid for debugging, code guidance, problem solving and README documentation
 
 ### Acknowledgements
 
-- My tutor, Rachel Frurlong, for guidance and support throughout the project
+- My tutor, Rachel Furlong, for guidance and support throughout the project
 - The Code Institute community and Discord channels
 
